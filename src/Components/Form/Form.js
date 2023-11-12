@@ -5,10 +5,11 @@ import OperationButton from "../Buttons/OperationButton";
 export const action = {
   AddDigit: "add digit",
   Clear: "clear",
+  ChoseOperation: "chose operation",
+  Equal: "equal",
 };
 
 function Form() {
-  console.log(action);
   let initialState = {
     currentNumber: "",
     previousNumber: "",
@@ -17,9 +18,43 @@ function Form() {
   const reducer = (state, { type, payload }) => {
     switch (type) {
       case action.AddDigit:
+        if (payload.digit === 0 && state.currentNumber === "") return state;
+        if (payload.digit === "00" && state.currentNumber === "") return state;
+        if (payload.digit === "." && state.currentNumber.includes(".")) return state;
+
         return {
           ...state,
           currentNumber: `${state.currentNumber || ""}${payload.digit}`,
+        };
+      case action.Clear:
+        return { currentNumber: "", previousNumber: "", operation: "" };
+
+      case action.ChoseOperation:
+        if (state.operation !== "" && state.currentNumber === "") {
+          return state;
+        }
+        if (state.currentNumber !== "" && state.previousNumber !== "" && state.operation !== "") {
+          return {
+            currentNumber: "",
+            previousNumber: equal(state),
+            operation: payload.operation,
+          };
+        }
+        return {
+          ...state,
+          previousNumber: state.currentNumber,
+          currentNumber: "",
+          operation: payload.operation,
+        };
+
+      case action.Equal:
+        if (state.currentNumber === "" || state.previousNumber === "" || state.operation === "") {
+          return state;
+        }
+        return {
+          currentNumber: equal(state),
+          previousNumber: "",
+          operation: "",
         };
 
       default:
@@ -27,6 +62,24 @@ function Form() {
     }
   };
   const [state, dispatch] = useReducer(reducer, initialState);
+  function equal(state) {
+    let { currentNumber, previousNumber, operation } = state;
+    currentNumber = parseFloat(currentNumber);
+    previousNumber = parseFloat(previousNumber);
+    switch (operation) {
+      case "+":
+        return previousNumber + currentNumber;
+      case "-":
+        return previousNumber - currentNumber;
+      case "*":
+        return previousNumber * currentNumber;
+      case "/":
+        return previousNumber / currentNumber;
+
+      default:
+        break;
+    }
+  }
 
   return (
     <form
@@ -35,28 +88,46 @@ function Form() {
       }}
     >
       <div className="display">
-        {console.log(typeof state, state)}
-        <p>{state.currentNumber}</p>
+        {console.log(state)}
+        <p>
+          {state.previousNumber}
+          <span>{state.operation}</span>
+        </p>
+        <p>{state.currentNumber === "" ? 0 : state.currentNumber}</p>
       </div>
 
-      <OperationButton operation={"AC"} className={"double"} />
-      <OperationButton operation={"."} />
-      <OperationButton operation={"/"} />
+      <button
+        className="double"
+        onClick={() => {
+          dispatch({ type: action.Clear });
+        }}
+      >
+        AC
+      </button>
+      <DigitButton digit={"."} dispatch={dispatch} />
+      <OperationButton operation={"/"} dispatch={dispatch} />
       <DigitButton digit={7} dispatch={dispatch} />
       <DigitButton digit={8} dispatch={dispatch} />
       <DigitButton digit={9} dispatch={dispatch} />
-      <OperationButton operation={"*"} />
+      <OperationButton operation={"*"} dispatch={dispatch} />
       <DigitButton digit={4} dispatch={dispatch} />
       <DigitButton digit={5} dispatch={dispatch} />
       <DigitButton digit={6} dispatch={dispatch} />
-      <OperationButton operation={"-"} />
+      <OperationButton operation={"-"} dispatch={dispatch} />
       <DigitButton digit={1} dispatch={dispatch} />
       <DigitButton digit={2} dispatch={dispatch} />
       <DigitButton digit={3} dispatch={dispatch} />
-      <OperationButton operation={"+"} />
+      <OperationButton operation={"+"} dispatch={dispatch} />
       <DigitButton digit={"00"} dispatch={dispatch} />
       <DigitButton digit={0} dispatch={dispatch} />
-      <OperationButton operation={"="} className={"double"} />
+      <button
+        className={"double"}
+        onClick={() => {
+          dispatch({ type: action.Equal });
+        }}
+      >
+        =
+      </button>
     </form>
   );
 }
