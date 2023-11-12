@@ -14,11 +14,13 @@
   justify-content: center;
 }
 .calculator {
+  max-width: 365px;
   background: #3a4452;
   padding: 20px;
   border-radius: 10px;
 }
-.calculator form input {
+.calculator form input,
+.calculator form button {
   border: 0;
   outline: 0;
   width: 60px;
@@ -36,17 +38,20 @@ form .display {
   display: flex;
   justify-content: flex-end;
   margin: 20px 0;
+  height: 84px;
 }
-form .display input {
+form .display p {
   text-align: right;
+  color: #fff;
   flex: 1;
   font-size: 45px;
   box-shadow: none;
 }
-form input.equal {
+
+form button.double {
   width: 145px;
 }
 
-form input.operator {
+form button.operator {
   color: #33ffd8;
 }
