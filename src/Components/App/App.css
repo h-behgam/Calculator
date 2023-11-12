@@ -35,17 +35,15 @@
 }
 
 form .display {
-  display: flex;
-  justify-content: flex-end;
-  margin: 20px 0;
-  height: 84px;
+  margin: 10px 0;
+  height: 100px;
 }
 form .display p {
   text-align: right;
   color: #fff;
-  flex: 1;
   font-size: 45px;
   box-shadow: none;
+  height: 50px;
 }
 
 form button.double {
