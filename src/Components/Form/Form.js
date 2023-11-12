@@ -30,6 +30,9 @@ function Form() {
         return { currentNumber: "", previousNumber: "", operation: "" };
 
       case action.ChoseOperation:
+        if (state.currentNumber === "" && state.previousNumber === "" && payload.operation !== "") {
+            return {...state, operation: ""}
+        }
         if (state.operation !== "" && state.currentNumber === "") {
           return state;
         }
@@ -61,7 +64,9 @@ function Form() {
         return state;
     }
   };
+
   const [state, dispatch] = useReducer(reducer, initialState);
+
   function equal(state) {
     let { currentNumber, previousNumber, operation } = state;
     currentNumber = parseFloat(currentNumber);
