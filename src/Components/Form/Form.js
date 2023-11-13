@@ -18,24 +18,32 @@ function Form() {
   const reducer = (state, { type, payload }) => {
     switch (type) {
       case action.AddDigit:
+        // if type 0 for first number
         if (payload.digit === 0 && state.currentNumber === "") return state;
+        // if type 00 for first number
         if (payload.digit === "00" && state.currentNumber === "") return state;
+        // if type . for first type
         if (payload.digit === "." && state.currentNumber.includes(".")) return state;
 
         return {
           ...state,
           currentNumber: `${state.currentNumber || ""}${payload.digit}`,
         };
+
       case action.Clear:
         return { currentNumber: "", previousNumber: "", operation: "" };
 
       case action.ChoseOperation:
+        // change operation
+        if (state.currentNumber === "" && state.previousNumber !== "" && payload.operation !== "") {
+          return { ...state, operation: payload.operation };
+        }
+        // type operation without currentNumber
         if (state.currentNumber === "" && state.previousNumber === "" && payload.operation !== "") {
-            return {...state, operation: ""}
+          return { ...state, operation: "" };
         }
-        if (state.operation !== "" && state.currentNumber === "") {
-          return state;
-        }
+
+        // type operation after type two numbers
         if (state.currentNumber !== "" && state.previousNumber !== "" && state.operation !== "") {
           return {
             currentNumber: "",
@@ -43,6 +51,7 @@ function Form() {
             operation: payload.operation,
           };
         }
+        // type operation after currentNumber
         return {
           ...state,
           previousNumber: state.currentNumber,
@@ -51,11 +60,12 @@ function Form() {
         };
 
       case action.Equal:
+        // if current number anf previousNumber is empty
         if (state.currentNumber === "" || state.previousNumber === "" || state.operation === "") {
           return state;
         }
         return {
-          currentNumber: equal(state),
+          currentNumber: equal(state).toFixed(2),
           previousNumber: "",
           operation: "",
         };
@@ -65,8 +75,10 @@ function Form() {
     }
   };
 
+  // Declare  reducer
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  // calculate operation
   function equal(state) {
     let { currentNumber, previousNumber, operation } = state;
     currentNumber = parseFloat(currentNumber);
