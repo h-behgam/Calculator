@@ -60,12 +60,12 @@ function Form() {
         };
 
       case action.Equal:
-        // if current number anf previousNumber is empty
+        // if currentNumber and previousNumber is empty
         if (state.currentNumber === "" || state.previousNumber === "" || state.operation === "") {
           return state;
         }
         return {
-          currentNumber: equal(state).toFixed(2),
+          currentNumber: equal(state),
           previousNumber: "",
           operation: "",
         };
@@ -77,6 +77,13 @@ function Form() {
 
   // Declare  reducer
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  //check if final number isfloat number show just two decimal
+  function checkIsFloat(number) {
+    number = parseFloat(number);
+    if (Number.isInteger(number)) return parseInt(number);
+    return number.toFixed(2);
+  }
 
   // calculate operation
   function equal(state) {
@@ -105,12 +112,11 @@ function Form() {
       }}
     >
       <div className="display">
-        {console.log(state)}
         <p>
-          {state.previousNumber}
+          {state.previousNumber && checkIsFloat(state.previousNumber)}
           <span>{state.operation}</span>
         </p>
-        <p>{state.currentNumber === "" ? 0 : state.currentNumber}</p>
+        <p>{state.currentNumber === "" ? 0 : checkIsFloat(state.currentNumber)}</p>
       </div>
 
       <button
