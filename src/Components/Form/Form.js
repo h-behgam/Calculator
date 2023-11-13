@@ -80,7 +80,6 @@ function Form() {
 
   //check if final number isfloat number show just two decimal
   function checkIsFloat(number) {
-    if (number === ".") return ".";
     number = parseFloat(number);
     if (Number.isInteger(number)) return parseInt(number);
     return Number.parseFloat(number.toFixed(2));
