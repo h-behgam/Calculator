@@ -65,7 +65,7 @@ function Form() {
           return state;
         }
         return {
-          currentNumber: equal(state),
+          currentNumber: checkIsFloat(equal(state)),
           previousNumber: "",
           operation: "",
         };
@@ -80,9 +80,10 @@ function Form() {
 
   //check if final number isfloat number show just two decimal
   function checkIsFloat(number) {
+    if (number === ".") return ".";
     number = parseFloat(number);
     if (Number.isInteger(number)) return parseInt(number);
-    return number.toFixed(2);
+    return Number.parseFloat(number.toFixed(2));
   }
 
   // calculate operation
@@ -113,10 +114,10 @@ function Form() {
     >
       <div className="display">
         <p>
-          {state.previousNumber && checkIsFloat(state.previousNumber)}
+          {state.previousNumber && state.previousNumber}
           <span>{state.operation}</span>
         </p>
-        <p>{state.currentNumber === "" ? 0 : checkIsFloat(state.currentNumber)}</p>
+        <p>{state.currentNumber === "" ? 0 : state.currentNumber}</p>
       </div>
 
       <button
