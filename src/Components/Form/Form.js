@@ -15,6 +15,34 @@ function Form() {
     previousNumber: "",
     operation: "",
   };
+
+  //check if final number isfloat number show just two decimal
+  const checkIsFloat = (number) => {
+    number = parseFloat(number);
+    if (Number.isInteger(number)) return parseInt(number);
+    return Number.parseFloat(number.toFixed(2));
+  };
+
+  // calculate operation
+  const equal = (state) => {
+    let { currentNumber, previousNumber, operation } = state;
+    currentNumber = parseFloat(currentNumber);
+    previousNumber = parseFloat(previousNumber);
+    switch (operation) {
+      case "+":
+        return previousNumber + currentNumber;
+      case "-":
+        return previousNumber - currentNumber;
+      case "*":
+        return previousNumber * currentNumber;
+      case "/":
+        return previousNumber / currentNumber;
+
+      default:
+        break;
+    }
+  };
+
   const reducer = (state, { type, payload }) => {
     switch (type) {
       case action.AddDigit:
@@ -77,33 +105,6 @@ function Form() {
 
   // Declare  reducer
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  //check if final number isfloat number show just two decimal
-  function checkIsFloat(number) {
-    number = parseFloat(number);
-    if (Number.isInteger(number)) return parseInt(number);
-    return Number.parseFloat(number.toFixed(2));
-  }
-
-  // calculate operation
-  function equal(state) {
-    let { currentNumber, previousNumber, operation } = state;
-    currentNumber = parseFloat(currentNumber);
-    previousNumber = parseFloat(previousNumber);
-    switch (operation) {
-      case "+":
-        return previousNumber + currentNumber;
-      case "-":
-        return previousNumber - currentNumber;
-      case "*":
-        return previousNumber * currentNumber;
-      case "/":
-        return previousNumber / currentNumber;
-
-      default:
-        break;
-    }
-  }
 
   return (
     <form
