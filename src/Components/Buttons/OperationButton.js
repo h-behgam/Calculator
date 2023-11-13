@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { action } from "../Form/Form";
 
 function OperationButton({ operation, className, dispatch }) {
@@ -14,4 +14,4 @@ function OperationButton({ operation, className, dispatch }) {
   );
 }
 
-export default OperationButton;
+export default memo(OperationButton);
