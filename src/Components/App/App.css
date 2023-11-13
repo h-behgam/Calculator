@@ -37,6 +37,7 @@
 form .display {
   margin: 10px 0;
   height: 100px;
+  overflow: hidden;
 }
 form .display p {
   text-align: right;
